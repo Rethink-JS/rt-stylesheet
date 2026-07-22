@@ -115,9 +115,44 @@ class    variant  breakpoint
 
 ---
 
+## What counts as a text style?
+
+In `rt-stylesheet`, a text style is a reusable typography decision that should become a reusable CSS output.
+
+It should usually define:
+
+- font family
+- font weight
+- font style, such as normal or italic
+- font size
+- line-height
+- letter-spacing
+- responsive breakpoint values
+
+A text style should not be created just because the text content changes.
+
+Do not create new text styles only for:
+
+- uppercase text
+- lowercase text
+- title case
+- sentence case
+- text colour
+- link colour
+- underline states
+- hover states
+- one-off page placement
+- one-off content wording
+
+Those are usually content, component, utility, or interaction decisions.
+
+They should not become typography variants unless they also represent a reusable typography behaviour.
+
+---
+
 ## Class
 
-The class describes the main typography level.
+The class is a reusable name for a typography family in the system.
 
 Examples:
 
@@ -132,7 +167,19 @@ caption1
 eyebrow1
 ```
 
-Use the class to describe the role of the style in the system.
+A class is not a visual ranking rule, and it is not tied to an HTML tag.
+
+`title1` does not have to mean “the largest heading”.
+
+`title2` does not have to be smaller than `title1`.
+
+`title1` does not have to be used only on an `h1`.
+
+That older way of thinking mixes content structure with visual styling. In modern responsive systems, the HTML tag should describe the content structure, while the text style should describe the reusable typography treatment.
+
+That means an `h1`, `p`, `li`, or any other element can use any approved text style when the design calls for it.
+
+Use the class as a stable system name.
 
 For example:
 
@@ -140,29 +187,39 @@ For example:
 title1
 ```
 
-could be your largest heading style.
+can mean your first reusable title family.
 
 ```txt
 body1
 ```
 
-could be your primary paragraph style.
+can mean your first reusable body family.
 
-The class should be reusable. Avoid tying it too tightly to a specific page or section.
+The number helps separate one reusable family from another. It should not be treated as a promise about size, importance, or HTML structure.
 
-Good:
+Class names must stay reusable and system-level.
+
+Use:
 
 ```txt
 title1-1-desktop
 ```
 
-Avoid:
+Do not use:
 
 ```txt
 homepage-hero-heading-desktop
 ```
 
-The first one belongs to a system. The second one belongs to a single layout.
+`title1-1-desktop` belongs to the typography system.
+
+`homepage-hero-heading-desktop` is not valid in an `rt-stylesheet` setup because it describes a single layout instead of a reusable typography class.
+
+If a hero needs its own reusable typography behaviour, create a structured variant instead:
+
+```txt
+title1-2-desktop
+```
 
 ---
 
@@ -178,7 +235,7 @@ title1-2
 title1-3
 ```
 
-Variants are useful when styles belong to the same typography family but need different responsive behaviour.
+Variants are useful when styles belong to the same typography family, but need a different reusable typography behaviour.
 
 Example:
 
@@ -194,12 +251,58 @@ title1-2-mobile
 
 Both are `title1` styles, but they are different variants.
 
-Use variants when:
+Use variants when the style still belongs to the same typography level, but needs a meaningful difference such as:
 
-- two headings share the same general role
-- one heading needs different mobile scaling
-- a layout needs an alternate version of an existing typography level
-- you want to avoid inventing unrelated names for related styles
+- different responsive scaling
+- different mobile size
+- different line-height
+- different letter-spacing
+- different font weight for a reusable typography role
+- different font style for a reusable typography role
+- a repeated layout pattern that needs an alternate version of the same typography level
+
+Do not use variants only for text casing.
+
+These should not become variants by themselves:
+
+```txt
+title1-2 = uppercase title1
+title1-3 = lowercase title1
+title1-4 = title case title1
+```
+
+Casing is usually a content or CSS utility decision. It does not change the responsive typography system.
+
+### Bold and italic
+
+Bold and italic should be handled carefully.
+
+They can be part of a text style when the weight or italic style is a reusable typography decision.
+
+Good examples:
+
+```txt
+body1-1-desktop
+body1-1-tablet
+body1-1-mobile
+
+body1-2-desktop
+body1-2-tablet
+body1-2-mobile
+```
+
+This is okay if `body1-2` is a deliberate reusable alternate body style, such as a stronger intro paragraph or a repeated editorial body treatment.
+
+Do not create variants just because some words inside a paragraph are bold or italic.
+
+Inline emphasis should usually stay as rich text content, such as bold or italic text inside a paragraph, rather than becoming a new `rt-stylesheet` variant.
+
+Use this rule:
+
+```txt
+Reusable typography behaviour = text style or variant
+Inline emphasis or casing = not a variant
+```
 
 This keeps the system flexible without becoming messy.
 
@@ -370,6 +473,8 @@ Before handoff, check:
 
 - Do all major typography classes have the breakpoint styles they need?
 - Are variants intentional?
+- Are variants based on reusable typography behaviour, not just casing?
+- Are bold and italic variants only used when they are reusable typography styles?
 - Are one-off names avoided?
 - Are class names reusable?
 - Are desktop, tablet, and mobile styles clearly connected?
@@ -442,6 +547,14 @@ Generated CSS selector:
 .title1-1
 ```
 
+The generator also supports a direct attribute selector for the same style:
+
+```css
+[rt-text-style="title1-1"]
+```
+
+This is useful when adding a class is not possible or not practical.
+
 The breakpoint suffix determines where that style belongs in the responsive output.
 
 ---
@@ -459,7 +572,8 @@ title1-1-mobile
 can map to one responsive CSS class:
 
 ```css
-.title1-1 {
+.title1-1,
+[rt-text-style="title1-1"] {
   font-family: var(--font-primary);
   font-weight: 600;
   font-size: 4rem;
@@ -468,14 +582,16 @@ can map to one responsive CSS class:
 }
 
 @media screen and (max-width: 991.98px) {
-  .title1-1 {
+  .title1-1,
+  [rt-text-style="title1-1"] {
     font-size: 3rem;
     line-height: 1.15;
   }
 }
 
 @media screen and (max-width: 479.98px) {
-  .title1-1 {
+  .title1-1,
+  [rt-text-style="title1-1"] {
     font-size: 2.25rem;
     line-height: 1.2;
   }
@@ -703,14 +819,16 @@ Rethink Stylesheet Generator is the Figma plugin built to help teams apply the `
 The plugin can:
 
 - scan local text styles
-- group responsive variants
+- group responsive style sets
 - detect missing breakpoint styles
 - generate missing text styles as a starting point
-- map font families and font weights
+- map font families, font weights, and normal or italic font styles
 - configure breakpoint widths
 - generate fixed or fluid responsive CSS
-- copy minified CSS
-- download `rt-stylesheet.css`
+- output class selectors and direct text style attribute selectors
+- optionally add a small rich text helper script
+- copy embed code
+- download CSS, or CSS and helper JS when the helper is enabled
 - generate a polished typography stylesheet frame for handoff
 
 ---
@@ -753,6 +871,7 @@ Choose:
 - font mappings
 - root font size
 - output filename
+- optional rich text helper output
 - stylesheet frame details
 
 ### 5. Export
@@ -763,7 +882,11 @@ Generate:
 rt-stylesheet.css
 ```
 
-and an editable typography stylesheet frame.
+Copy gives embed-ready code with a `<style>` wrapper.
+
+Download gives a CSS file. If the rich text helper is enabled, download gives both the CSS file and the helper JS file.
+
+You can also generate an editable typography stylesheet frame for handoff.
 
 ---
 
