@@ -696,6 +696,8 @@ Developers receive predictable implementation data.
 
 # Rethink Stylesheet Generator
 
+> **Coming soon:** The 'Rethink Stylesheet Generator' Figma plugin is not yet live.
+
 Rethink Stylesheet Generator is the Figma plugin built to help teams apply the `rt-stylesheet` methodology faster and more accurately.
 
 The plugin can:
