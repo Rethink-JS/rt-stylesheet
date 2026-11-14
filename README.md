@@ -20,6 +20,14 @@ This gives designers a clear way to organise responsive text styles, and gives d
 
 ---
 
+## Documentation
+
+The expanded, opinionated methodology documentation is in **[docs/README.md](docs/README.md)**. Start with [the philosophy](docs/philosophy.md), [naming specification](docs/naming.md), [why the rules exist](docs/why-the-rules.md), [designer guide](docs/guides/designers.md), [developer guide](docs/guides/developers.md), and [worked example](docs/examples/responsive-typography.md).
+
+The methodology is independent of its Figma generator. The documentation distinguishes established naming properties from claims that still need evidence.
+
+---
+
 ## Choose your path
 
 ### Designers
@@ -812,9 +820,11 @@ Developers receive predictable implementation data.
 
 # Rethink Stylesheet Generator
 
-> **Coming soon:** The 'Rethink Stylesheet Generator' Figma plugin is not yet live.
+> **Release status:** Consult the [generator documentation](docs/generator.md). Development-source features should not be assumed to be available in the Figma Community version.
 
 Rethink Stylesheet Generator is the Figma plugin built to help teams apply the `rt-stylesheet` methodology faster and more accurately.
+
+For a version-aware explanation, see [Generator documentation](docs/generator.md). The public plugin release status and development-source version may differ.
 
 The plugin can:
 
@@ -826,9 +836,9 @@ The plugin can:
 - configure breakpoint widths
 - generate fixed or fluid responsive CSS
 - output class selectors and direct text style attribute selectors
-- optionally add a small rich text helper script
+- optionally generate a rich-text CSS helper stylesheet (in the reviewed development version)
 - copy embed code
-- download CSS, or CSS and helper JS when the helper is enabled
+- download CSS, or main and helper CSS files when the helper is enabled
 - generate a polished typography stylesheet frame for handoff
 
 ---
@@ -884,7 +894,7 @@ rt-stylesheet.css
 
 Copy gives embed-ready code with a `<style>` wrapper.
 
-Download gives a CSS file. If the rich text helper is enabled, download gives both the CSS file and the helper JS file.
+Download gives a CSS file. If the rich text helper is enabled in the reviewed development version, download provides both main and helper CSS files.
 
 You can also generate an editable typography stylesheet frame for handoff.
 
